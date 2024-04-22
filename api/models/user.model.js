@@ -17,10 +17,10 @@ const userSchema = new mongoose.Schema(
       required: true,
     },
   },
-  { timestamps: ture }
+  { timestamps: true }
 );
 
 //After creating Schema, we need to create Model
-const User = mongoose.model("User", userSchema); //Name shoud be capital, We don't put 's' because Mongodb going to  add it automatically. 
+const User = mongoose.model("User", userSchema); //Name should be capital, We don't put 's' because Mongodb going to  add it automatically. 
 
-export default User; // export it default so we can use it on other places in our application, when we need it. so model is created now, we'll use it later when we are Signing up user or update them. 
+export default User; // export it default so we can use it in other places in our application, when we need it. so model is created now, we'll use it later when we are Signing up user or update them. 
