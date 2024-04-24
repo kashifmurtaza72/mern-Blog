@@ -76,7 +76,7 @@ export default function SignUp() {
               />
             </div>
             <Button gradientDuoTone="purpleToPink" type="submit">
-              Sign Up{" "}
+              Sign Up
             </Button>
           </form>
           <div className="flex gap-2 text-sm mt-5">
