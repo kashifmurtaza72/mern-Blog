@@ -6,26 +6,23 @@ export default function SignUp() {
   const [formData, setFormData] = useState({});
   const handleChange = (event) => {
     //console.log(event.target.value);
-    setFormData({ ...formData, [event.target.name]: event.target.value });
+    setFormData({ ...formData, [event.target.id]: event.target.value });
   };
-  const handleSubmit = async (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
     try {
-      const res = await fetch("/api/auth/signup", {
+      const res = fetch("/api/auth/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
       });
-      const data = await res.json();
-      console.log(data);
+      res.json();
     } catch (event) {
-      console.log('kashif');
+      console.log("error");
     }
-    //console.log(formData);
   };
-  //console.log(formData);
   return (
     <div className="min-h-screen mt-20">
       <div className="flex p-3 max-w-3xl mx-auto flex-col md:flex-row md:items-center gap-5">
@@ -51,7 +48,6 @@ export default function SignUp() {
                 type="text"
                 placeholder="username"
                 id="username"
-                name="username"
                 onChange={handleChange}
               />
             </div>
@@ -59,7 +55,6 @@ export default function SignUp() {
               <Label value="Your Email" />
               <TextInput
                 type="email"
-                name="email"
                 placeholder="name@company.com"
                 id="email"
                 onChange={handleChange}
@@ -69,7 +64,6 @@ export default function SignUp() {
               <Label value="Your Password" />
               <TextInput
                 type="password"
-                name="password"
                 placeholder="password"
                 id="password"
                 onChange={handleChange}
