@@ -6,20 +6,16 @@ import { useDispatch } from 'react-redux';
 import { signInSuccess } from "../redux/user/userSlice";
 import { Link, useNavigate } from "react-router-dom";
 
-
-
-
 export default function OAuth() {
-    const dispatch = useDispatch();
     const auth = getAuth(app);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
     const handleGoogleClick = async () => {
         const provider = new GoogleAuthProvider();
-        const navigate = useNavigate();
         provider.setCustomParameters({ prompt: 'select_account' })
         try {
             const resultsFromGoogle = await signInWithPopup(auth, provider);
             //console.log(resultsFromGoogle);
-
             const res = await fetch('/api/auth/google', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -33,13 +29,10 @@ export default function OAuth() {
             if (res.ok) {
                 dispatch(signInSuccess(data));
                 navigate('/');
-
             }
-
         } catch (err) {
             console.log(err);
         }
-
     }
     return (
         <Button type="button" gradientDuoTone="pinkToOrange" outline onClick={handleGoogleClick}>
