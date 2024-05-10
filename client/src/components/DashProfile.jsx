@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import { Button, TextInput } from "flowbite-react";
 import { useEffect, useRef, useState } from "react";
-import {getStorage} from "firebase/storage";
+import {getStorage, ref, uploadBytesResumable} from "firebase/storage";
 import { app } from "../firebase";
 
 export default function DashProfile() {
@@ -36,6 +36,33 @@ export default function DashProfile() {
     // }
     //console.log('uploading image...')
     const storage = getStorage(app);
+    const fileName = new Date().getTime() + imageFile.name;
+    const storageRef = ref(storage, fileName);
+    const uploadTask = uploadBytesResumable(storageRef, imageFile); 
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log("Upload is " + progress + "% done");
+        switch (snapshot.state) {
+          case "paused":
+            console.log("Upload is paused");
+            break;
+          case "running":
+            console.log("Upload is running");
+            break;
+        }
+      },
+      (error) => {
+        console.log(error);
+      },
+      () => {
+        uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+          console.log("File available at", downloadURL);
+          setImageFileUrl(downloadURL);
+        });
+      }
+    )
   };
   return (
     <div className="max-w-lg mx-auto p-3 w-full">
