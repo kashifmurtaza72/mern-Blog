@@ -1,13 +1,20 @@
 import { useSelector } from "react-redux";
-import { Button, TextInput } from "flowbite-react";
+import { Alert, Button, TextInput } from "flowbite-react";
 import { useEffect, useRef, useState } from "react";
-import {getStorage, ref, uploadBytesResumable} from "firebase/storage";
+import { getDownloadURL, getStorage, ref, uploadBytesResumable } from "firebase/storage";
 import { app } from "../firebase";
+import { CircularProgressbar } from 'react-circular-progressbar';
+import 'react-circular-progressbar/dist/styles.css';
 
 export default function DashProfile() {
   const { currentUser } = useSelector((state) => state.user);
   const [imageFile, setImageFile] = useState(null);
   const [imageFileUrl, setImageFileUrl] = useState(null);
+  const [imageFileUploadProgress, setImageFileUploadProgress] = useState(null);
+  const [imageFileUploadError, setImageFileUploadError] = useState(null);
+  const [imageFileUploading, setImageFileUploading] = useState(false);
+  console.log(imageFileUploadProgress, imageFileUploadError)
+
   const filePickerRef = useRef();
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -23,47 +30,49 @@ export default function DashProfile() {
     }
   }, [imageFile]);
   const uploadImage = async () => {
-    //    /databases/(default)/documents/users/$(request.auth.uid)).data.isAdmin;
     // service firebase.storage {
     //   match /b/{bucket}/o {
     //     match /{allPaths=**} {
     //       allow read;
     //       allow write: if
-    //       request.resource.size < 2 * 1024 * 1024 && 
+    //       request.resource.size < 2 * 1024 * 1024 &&
     //       request.resource.contentType.matches('image/.*')
     //     }
     //   }
     // }
-    //console.log('uploading image...')
+    setImageFileUploading(true);
+    setImageFileUploadError(null);
     const storage = getStorage(app);
     const fileName = new Date().getTime() + imageFile.name;
     const storageRef = ref(storage, fileName);
-    const uploadTask = uploadBytesResumable(storageRef, imageFile); 
+    const uploadTask = uploadBytesResumable(storageRef, imageFile);
     uploadTask.on(
-      "state_changed",
+      'state_changed',
       (snapshot) => {
-        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        console.log("Upload is " + progress + "% done");
-        switch (snapshot.state) {
-          case "paused":
-            console.log("Upload is paused");
-            break;
-          case "running":
-            console.log("Upload is running");
-            break;
-        }
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+
+        setImageFileUploadProgress(progress.toFixed(0));
       },
       (error) => {
-        console.log(error);
+        setImageFileUploadError(
+          'Could not upload image (File must be less than 2MB)'
+        );
+        setImageFileUploadProgress(null);
+        setImageFile(null);
+        setImageFileUrl(null);
+        setImageFileUploading(false);
       },
-      () => {
-        uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
-          console.log("File available at", downloadURL);
-          setImageFileUrl(downloadURL);
-        });
-      }
-    )
+      // () => {
+      //   getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+      //     setImageFileUrl(downloadURL);
+      //     setFormData({ ...formData, profilePicture: downloadURL });
+      //     setImageFileUploading(false);
+      //   });
+      // }
+    );
   };
+
   return (
     <div className="max-w-lg mx-auto p-3 w-full">
       <h1 className="my-7 text-center font-semibold text-3xl">Profile</h1>
@@ -77,6 +86,8 @@ export default function DashProfile() {
             className="rounded-full w-full h-full border-8 border-[lightgray] object-cover"
           />
         </div>
+        {imageFileUploadError && <Alert color='failure'>{imageFileUploadError}</Alert>}
+        
         <TextInput
           type="text"
           id="username"
