@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import userRoutes from "./routes/user.route.js"
 import authRoutes from "./routes/auth.route.js";
+import cookieParser from "cookie-parser";
 
 dotenv.config();
 mongoose.connect(process.env.MONGO).then(() => {
@@ -14,6 +15,7 @@ mongoose.connect(process.env.MONGO).then(() => {
 
 const app = express();
 app.use(express.json()); // this is going to allow json as the input of the backend. 
+app.use(cookieParser());
 
 app.get("/", function (req, res) {
   res.send("Hello World!");
