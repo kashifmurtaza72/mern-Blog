@@ -8,7 +8,8 @@ import {
   ref,
   uploadBytesResumable,
 } from "firebase/storage";
-import { app } from "../firebase";
+import { app } from '../firebase';
+
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 
@@ -17,6 +18,7 @@ export default function CreatePost() {
   const [imageUploadProgress, setImageUploadProgress] = useState(null);
   const [imageUploadError, setImageUploadError] = useState(null);
   const [formData, setFormData] = useState({});
+  console.log(file);
   const handleUploadImage = async () => {
     try {
       if (!file) {
@@ -72,13 +74,13 @@ export default function CreatePost() {
             <option value="reactjs">React.js</option>
             <option value="nextjs">Next.js</option>
           </Select>
-        </div>\
+        </div>
         
         <div className="flex gap-4 items-center justify-between border-4 border-teal-500 border-dotted p-3">
           <FileInput
             type="file"
             accept="image/*"
-            onChange={(e) => setFile(e.target.value[0])}
+            onChange={(e) => setFile(e.target.files[0])}
           />
           <Button
             type="button"
