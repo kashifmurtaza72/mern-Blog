@@ -2,7 +2,12 @@ import { Alert, Button, FileInput, Select, TextInput } from "flowbite-react";
 import { useEffect, useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import { getDownloadURL, getStorage, ref, uploadBytesResumable, } from "firebase/storage";
+import {
+  getDownloadURL,
+  getStorage,
+  ref,
+  uploadBytesResumable,
+} from "firebase/storage";
 import { app } from "../firebase";
 import { useSelector } from "react-redux";
 import { CircularProgressbar } from "react-circular-progressbar";
@@ -10,7 +15,6 @@ import "react-circular-progressbar/dist/styles.css";
 import { useNavigate, useParams } from "react-router-dom";
 
 export default function UpdatePost() {
-
   const [file, setFile] = useState(null);
   const [imageUploadProgress, setImageUploadProgress] = useState(null);
   const [imageUploadError, setImageUploadError] = useState(null);
@@ -18,34 +22,31 @@ export default function UpdatePost() {
   const [publishError, setPublishError] = useState(null);
   const { postId } = useParams();
   const navigate = useNavigate();
-  const { currentUser } = useSelector((state) => state.user)
+  const { currentUser } = useSelector((state) => state.user);
 
   useEffect(() => {
     try {
       const fetchPost = async () => {
-        const res = await fetch(`/api/post/getposts?postId=${postId}`)
+        const res = await fetch(`/api/post/getposts?postId=${postId}`);
         const data = await res.json();
-        
+
         if (!res.ok) {
           console.log(data.message);
-          setPublishError(data.message)
-          return
-        } if (res.ok) {
-          setPublishError(null)
-          setFormData(data.posts[0])
-          console.log(data.posts[0] + 'kashifff')
+          setPublishError(data.message);
+          return;
         }
-      }
+        if (res.ok) {
+          setPublishError(null);
+          setFormData(data.posts[0]);
+        }
+      };
 
       fetchPost();
     } catch (error) {
-      console.log(error.message)
-
+      console.log(error.message);
     }
   }, [postId]);
 
-
-  //console.log(formData);
   const handleUploadImage = async () => {
     try {
       if (!file) {
@@ -86,14 +87,16 @@ export default function UpdatePost() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      console.log(formData._id + 'kashif')
-      const res = await fetch(`/api/post/updatepost/${formData._id}/${currentUser._id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+      const res = await fetch(
+        `/api/post/updatepost/${postId}/${currentUser._id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
       const data = await res.json();
       if (!res.ok) {
         setPublishError(data.message);
