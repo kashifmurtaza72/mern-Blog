@@ -33,7 +33,7 @@ export const getposts = async (req, res, next) => {
         const limit = parseInt(req.query.limit) || 9
         const sortDirection = req.query.order === 'asc' ? 1 : -1
 
-        const posts = await Post.find({ 
+        const posts = await Post.find({
             ...(req.query.userId && { userId: req.query.userId }),
             ...(req.query.category && { category: req.query.category }),
             ...(req.query.slug && { slug: req.query.slug }),
@@ -51,15 +51,15 @@ export const getposts = async (req, res, next) => {
         const now = new Date()
 
         const oneMonthAgo = new Date(
-            now.getFullYear(), 
-            now.getMonth()-1,
+            now.getFullYear(),
+            now.getMonth() - 1,
             now.getDate()
         );
         const lastMonthPosts = await Post.countDocuments({
-            createdAt : { $gte : oneMonthAgo }, 
+            createdAt: { $gte: oneMonthAgo },
         });
 
-        res.status(200).json({ 
+        res.status(200).json({
             posts,
             totalPosts,
             lastMonthPosts
@@ -71,17 +71,41 @@ export const getposts = async (req, res, next) => {
     }
 }
 
-export const deletepost = async(req, res, next) => {
-    if (!req.user.isAdmin || req.user.id !== req.params.userId ) {
+export const deletepost = async (req, res, next) => {
+    if (!req.user.isAdmin || req.user.id !== req.params.userId) {
         return next(errorHandler(403, 'You are not allowed to delete this post'));
     }
 
     try {
         await Post.findByIdAndDelete(req.params.postId);
         res.status(200).json({ message: "Post has been deleted" });
-        
+
     } catch (error) {
-        next(error);        
+        next(error);
     }
+
+}
+
+export const updatepost = async (req, res, next) => {
+    if (!req.user.isAdmin || req.user.id !== req.params.userId) {
+        return next(errorHandler(403, 'You are not allowed to update this post'));
+    }
+
+    try {
+        const updatedPost = await Post.findByIdAndUpdate(req.params.postId,
+            {
+                $set:
+                {
+                    title: req.body.title,
+                    content: req.body.content,
+                    category: req.body.category,
+                    image: req.body.image
+                }
+            }, { new: true });
+        res.status(200).json(updatedPost);
+    } catch (error) {
+        next(error);
+    }
+
 
 }
