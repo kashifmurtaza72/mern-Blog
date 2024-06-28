@@ -3,8 +3,6 @@ import { useEffect, useState } from "react";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
 import { useSelector } from "react-redux";
 import { FaCheck, FaTimes } from 'react-icons/fa'
-
-
 export default function DashUsers() {
     const { currentUser } = useSelector((state) => state.user);
     const [users, setUsers] = useState([]);
@@ -48,21 +46,22 @@ export default function DashUsers() {
         }
     }
     const handleDeleteUser = async () => {
-        // setShowModal(false);
-        // try {
-        //   const res = await fetch(`/api/user/deleteuser/${userIdToDelete}/${currentUser._id}`, {
-        //     method: "DELETE"
-        //   });
-        //   const data = await res.json();
-        //   if (!res.ok) {
-        //     console.log(data.message);
-        //   } else {
-        //     setUserPosts((prev) => prev.filter((post) => post._id !== postIdToDelete));
-        //   }
+        try {
+            const res = await fetch(`/api/user/delete/${userIdToDelete}`, {
+                method: "DELETE",
+            });
+            const data = await res.json();
 
-        // } catch (error) {
-        //   console.log(error.message);
-        // }
+            if (!res.ok) {
+                console.log(data.message);
+              } else {
+                setUsers((prev) => prev.filter((user) => user._id !== userIdToDelete));
+                setShowModal(false);
+              }
+
+        } catch (error) {
+            console.log(error.message);
+        }
     }
 
     return (
@@ -112,11 +111,7 @@ export default function DashUsers() {
                                         }} className="font-medium text-red-500 hover:underline cursor-pointer">Delete</span>
 
                                     </Table.Cell>
-
-
-
                                 </Table.Row>
-
                             </Table.Body>
                         ))}
                     </Table>
