@@ -31,7 +31,7 @@ export default function DashProfile() {
   const [imageFileUploading, setImageFileUploading] = useState(false);
   const [imageFileUploadError, setImageFileUploadError] = useState(null);
   const [updateUserSuccess, setUpdateUserSuccess] = useState(null);
-  const [uploadUserError, setUploadUserError] = useState(null);
+  const [updateUserError, setUpdateUserError] = useState(null);
   const [showModal, setShowModal] = useState(false);
   //console.log(imageFileUploadProgress, imageFileUploadError);
   const [formData, setFormData] = useState({});
@@ -107,15 +107,15 @@ export default function DashProfile() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     //console.log(formData);
-    setUploadUserError(null);
+    setUpdateUserError(null);
     setUpdateUserSuccess(null);
     if (Object.keys(formData).length === 0) {
-      setUploadUserError("No Changes made");
+      setUpdateUserError("No Changes made");
       return;
     }
 
     if (imageFileUploading) {
-      setUploadUserError("Please wait for image to upload");
+      setUpdateUserError("Please wait for image to upload");
       return;
     }
 
@@ -131,7 +131,7 @@ export default function DashProfile() {
       const data = await res.json();
       if (!res.ok) {
         dispatch(updateFailure(data.message));
-        setUploadUserError(data.message);
+        setUpdateUserError(data.message);
         return;
       } else {
         dispatch(updateSuccess(data));
@@ -139,7 +139,7 @@ export default function DashProfile() {
       }
     } catch (error) {
       dispatch(updateFailure(error.message));
-      setUploadUserError(error.message);
+      setUpdateUserError(error.message);
     }
   };
   const handleDeleteUser = async () => {
@@ -282,9 +282,9 @@ export default function DashProfile() {
         </Alert>
       )}
 
-      {uploadUserError && (
+      {updateUserError && (
         <Alert color="failure" className="mt-5">
-          {uploadUserError}
+          {updateUserError}
         </Alert>
       )}
 
