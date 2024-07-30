@@ -27,6 +27,7 @@ const commentSchema = new mongoose.Schema(
 );
 
 
-const Comment = mongoose.model("Comment", commentSchema); //Name should be capital, We don't put 's' because Mongodb going to  add it automatically. 
+const Comment = mongoose.model("Comment", commentSchema);
+
 
 export default Comment;
