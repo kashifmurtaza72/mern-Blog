@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
+import { FaThumbsUp } from "react-icons/fa";
 import moment from 'moment'
-export default function Comment({ comment }) {
+export default function Comment({ comment, onLike }) {
     const [user, setUser] = useState({})
     //console.log(user);
     useEffect(() => {
@@ -28,6 +29,9 @@ export default function Comment({ comment }) {
                     <span className="text-gray-500 text-xs">{moment(comment.createdAt).fromNow()}</span>
                 </div>
                 <p className="text-gray-500 pb-2">{comment.content}</p>
+                <div className="text-gray-400 hover:text-blue-500">
+                    <button type="button" onClick={()=>onLike(comment._id)}><FaThumbsUp /></button>
+                </div>
             </div>
         </div>
     )
