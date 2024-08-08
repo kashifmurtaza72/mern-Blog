@@ -56,16 +56,18 @@ export default function CommentSection({ postId }) {
     }, [postId])
 
     const handleLike = async (commentId) => {
-
+        //console.log('kashif', commentId)
         try {
             if (!currentUser) {
                 navigate('/signin')
+                return;
             }
             const res = await fetch(`/api/comment/likeComment/${commentId}`, {
                 method: 'PUT',
             });
             if (res.ok) {
                 const data = await res.json();
+                
                 setComments(comments.map((comment) => {
                     comment._id === commentId ? {
                         ...comment,
@@ -125,7 +127,6 @@ export default function CommentSection({ postId }) {
                     {comments.map((comment) => (
                         <Comment key={comment._id} comment={comment} onLike={handleLike} />
                     ))}
-
                 </>
             )}
         </div>
