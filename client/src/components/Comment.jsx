@@ -2,7 +2,10 @@ import { useEffect, useState } from "react"
 import { FaThumbsUp } from "react-icons/fa";
 import moment from 'moment'
 import { useSelector } from "react-redux";
+
+ 
 export default function Comment({ comment, onLike }) {
+    //console.log(comment, 'kashif')
     const [user, setUser] = useState({})
     const { currentUser } = useSelector(state => state.user);
     //console.log(user);
