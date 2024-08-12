@@ -7,7 +7,6 @@ export const createComment = async (req, res, next) => {
         if (userId !== req.user.id) {
             return next(errorHandler(403, 'You are not allowed to create this comment.'))
         }
-
         const newComment = new Comment({ content, postId, userId })
         await newComment.save();
 
@@ -31,6 +30,7 @@ export const getPostComments = async (req, res, next) => {
 }
 
 export const likeComment = async (req, res, next) => {
+    console.log(req.params)
     try {
         const comment = await Comment.findById(req.params.commentId);
         if (!comment) {

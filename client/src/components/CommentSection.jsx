@@ -59,7 +59,6 @@ export default function CommentSection({ postId }) {
   }, [postId]);
 
   const handleLike = async (commentId) => {
-    //console.log('kashif', commentId)
     try {
       if (!currentUser) {
         navigate("/signin");
@@ -72,17 +71,18 @@ export default function CommentSection({ postId }) {
         const data = await res.json();
 
         //console.log(data, currentUser)
-        // setComments(
-        //   comments.map((comment) =>
-        //     comment._id === commentId
-        //       ? {
-        //           ...comment,
-        //           likes: data.likes,
-        //           numberOfLikes: data.likes.length,
-        //         }
-        //       : comment
-        //   )
-        // );
+        setComments(
+          comments.map((comment) =>
+            comment._id === commentId
+              ? {
+                  ...comment,
+                  likes: data.likes,
+                  numberOfLikes: data.likes.length,
+                }
+              : comment
+          )
+        );
+        console.log(comments, 'kkkkk')
       }
     } catch (error) {
       console.log("error.message");

@@ -5,7 +5,6 @@ import { useSelector } from "react-redux";
 
  
 export default function Comment({ comment, onLike }) {
-    //console.log(comment, 'kashif')
     const [user, setUser] = useState({})
     const { currentUser } = useSelector(state => state.user);
     //console.log(user);
