@@ -82,7 +82,7 @@ export default function CommentSection({ postId }) {
               : comment
           )
         );
-        console.log(comments, 'kkkkk')
+        //console.log(comments, 'kkkkk')
       }
     } catch (error) {
       console.log("error.message");
@@ -152,6 +152,7 @@ export default function CommentSection({ postId }) {
               <p>{comments.length}</p>
             </div>
           </div>
+         
           {comments.map((comment) => (
             <Comment key={comment._id} comment={comment} onLike={handleLike} />
           ))}
