@@ -39,7 +39,7 @@ export default function Home() {
             <h2 className="text-2xl font-semibold text-center">Recent Posts</h2>
             <div className="flex flex-wrap gap-4">
               {posts.map((post) => (
-                <PostCard key={post.id} post={post} />
+                <PostCard key={post._id} post={post} />
               ))}
             </div>
             <Link to="/search" className="text-center text-teal-500 font-semibold text-lg hover:underline">View all posts</Link>
