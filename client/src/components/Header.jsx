@@ -23,6 +23,7 @@ export default function Header() {
     }
   }, [location.search]);
 
+  
   const handleSignout = async () => {
     try {
       const res = await fetch("/api/user/signout", {

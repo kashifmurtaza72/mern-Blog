@@ -20,17 +20,19 @@ export default function Search() {
     const searchTermFromUrl = UrlParams.get("searchTerm");
     const sortFromUrl = UrlParams.get("sort");
     const categoryFromUrl = UrlParams.get("category");
-    if (searchTermFromUrl || sortFromUrl || categoryFromUrl)
+    if (searchTermFromUrl || sortFromUrl || categoryFromUrl) {
       setSidebarData({
         ...sidebarData,
         searchTerm: searchTermFromUrl,
         category: categoryFromUrl,
         sort: sortFromUrl,
       });
-
+    }
+    console.log(sidebarData, searchTermFromUrl, 'testing...........')
     const fetchPosts = async () => {
       setLoading(true);
       const searchQuery = UrlParams.toString();
+      //console.log(searchQuery)
       const res = await fetch(`/api/post/getposts?${searchQuery}`, {
         method: "GET",
       });
@@ -42,13 +44,13 @@ export default function Search() {
         const data = await res.json();
         setPosts(data.posts);
         setLoading(false);
-        setShowMore(data.posts.length >= 9 || false);
+        setShowMore(data.posts.length === 9 || false);
       }
     };
     fetchPosts();
   }, [location.search]);
 
-  const handleSubmit =  (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
     const urlParams = new URLSearchParams(location.search);
@@ -74,7 +76,7 @@ export default function Search() {
 
     if (res.ok) {
       const data = await res.json();
-      setPosts([...posts,...data.posts]);
+      setPosts([...posts, ...data.posts]);
       setShowMore(data.posts.length >= 9);
     }
 
@@ -90,7 +92,7 @@ export default function Search() {
     }
     if (e.target.id === "category") {
       const category = e.target.value || "uncategorized";
-      setSidebarData({ ...sidebarData, [e.target.id]: e.target.value });
+      setSidebarData({ ...sidebarData, [e.target.id]: category });
     }
   };
   return (
@@ -137,12 +139,11 @@ export default function Search() {
       <div className="w-full">
         <h1 className="text-3xl font-semibold sm:border-b border-gray-500 p-3 mt-5">Post Results</h1>
         <div className="flex flex-wrap gap-4 p-7">
-          { !loading && posts.length === 0 && <p className="text-xl text-gray-500">No Posts found.</p>}
-          { loading && <p className="text-xl text-gray-500">Loading...</p>}
+          {!loading && posts.length === 0 && <p className="text-xl text-gray-500">No Posts found.</p>}
+          {loading && <p className="text-xl text-gray-500">Loading...</p>}
           {!loading && posts &&
-            posts.length > 0 &&
-            posts.map((post) => <PostCard id={post._id} post={post} />)}
-            { showMore && <button onClick={handleShowMore} className="text-teal-500 text-lg hover:underline p-7 w-full">Show More</button>}
+            posts.map((post) => <PostCard post={post} key={post._id} />)}
+          {showMore && <button onClick={handleShowMore} className="text-teal-500 text-lg hover:underline p-7 w-full">Show More</button>}
         </div>
       </div>
     </div>
