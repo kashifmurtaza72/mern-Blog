@@ -140,7 +140,7 @@ export default function Search() {
       </div>
       <div className="w-full">
         <h1 className="text-3xl font-semibold sm:border-b border-gray-500 p-3 mt-5">Post Results</h1>
-        <div className="flex flex-wrap gap-4 p-7">
+        <div className="flex flex-wrap gap-3 p-2">
           {!loading && posts.length === 0 && <p className="text-xl text-gray-500">No Posts found.</p>}
           {loading && <p className="text-xl text-gray-500">Loading...</p>}
           {!loading && posts &&

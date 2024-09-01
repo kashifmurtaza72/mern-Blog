@@ -17,15 +17,15 @@ export default function Home() {
   }, []);
   return (
     <div className="">
-      <div className="flex flex-col gap-4 p-28 px-3 max-w-6xl mx-auto">
+      <div className="flex flex-col gap-4 p-10 px-3 max-w-6xl mx-auto">
         <h1 className="text-3xl font-bold lg:text-6xl">Welcome to my Blog</h1>
-        <p className="text-gray-500 text-xs sm:text-sm">
+        <p className="text-gray-500 text-2xl sm:text-xl">
           Here you'll find a variety of articles and tutorials on topics such as
           web development, software engineering and programming languages.
         </p>
         <Link
           to="/search"
-          className="text-xs sm:text-sm text-teal-500 font-bold hover:underline"
+          className="uppercase text-teal-500 font-bold hover:underline"
         >
           View all posts
         </Link>
@@ -37,14 +37,14 @@ export default function Home() {
         {posts && posts.length > 0 && (
           <div className="flex flex-col gap-6">
             <h2 className="text-2xl font-semibold text-center">Recent Posts</h2>
-            <div className="flex flex-wrap gap-4">
+            <div className="flex flex-wrap gap-4 justify-center align-middle">
               {posts.map((post) => (
                 <PostCard key={post._id} post={post} />
               ))}
             </div>
             <Link
               to="/search"
-              className="text-center text-teal-500 font-semibold text-lg hover:underline"
+              className="uppercase text-center text-teal-500 font-semibold text-lg hover:underline"
             >
               View all posts
             </Link>
