@@ -6,9 +6,10 @@ import PostCard from "./../components/PostCard";
 export default function Search() {
   const [sidebarData, setSidebarData] = useState({
     searchTerm: "",
-    sort: "desc",
-    category: "uncategorized",
+    order: "desc",
+    category: "all",
   });
+  //console.log(sidebarData, 'kkkk')
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [showMore, setShowMore] = useState(false);
@@ -18,17 +19,17 @@ export default function Search() {
   useEffect(() => {
     const UrlParams = new URLSearchParams(location.search);
     const searchTermFromUrl = UrlParams.get("searchTerm");
-    const sortFromUrl = UrlParams.get("sort");
+    const orderFromUrl = UrlParams.get("order");
     const categoryFromUrl = UrlParams.get("category");
-    if (searchTermFromUrl || sortFromUrl || categoryFromUrl) {
+    if (searchTermFromUrl || orderFromUrl || categoryFromUrl) {
       setSidebarData({
         ...sidebarData,
         searchTerm: searchTermFromUrl,
         category: categoryFromUrl,
-        sort: sortFromUrl,
+        order: orderFromUrl,
       });
     }
-    console.log(sidebarData, searchTermFromUrl, 'testing...........')
+    //console.log(sidebarData, searchTermFromUrl, 'testing...........')
     const fetchPosts = async () => {
       setLoading(true);
       const searchQuery = UrlParams.toString();
@@ -55,7 +56,7 @@ export default function Search() {
 
     const urlParams = new URLSearchParams(location.search);
     urlParams.set("searchTerm", sidebarData.searchTerm);
-    urlParams.set("sort", sidebarData.sort);
+    urlParams.set("order", sidebarData.order);
     urlParams.set("category", sidebarData.category);
     const searchQuery = urlParams.toString();
     navigate(`/search?${searchQuery}`);
@@ -86,13 +87,13 @@ export default function Search() {
     if (e.target.id === "searchTerm") {
       setSidebarData({ ...sidebarData, [e.target.id]: e.target.value });
     }
-    if (e.target.id === "sort") {
-      const order = e.target.value || "desc";
-      setSidebarData({ ...sidebarData, [e.target.id]: order });
+    if (e.target.id === "order") {
+      //const order = e.target.value || "desc";
+      setSidebarData({ ...sidebarData, [e.target.id]: e.target.value });
     }
     if (e.target.id === "category") {
-      const category = e.target.value || "uncategorized";
-      setSidebarData({ ...sidebarData, [e.target.id]: category });
+      //const category = e.target.value || "uncategorized";
+      setSidebarData({ ...sidebarData, [e.target.id]: e.target.value });
     }
   };
   return (
@@ -113,7 +114,7 @@ export default function Search() {
           </div>
           <div className="flex items-center gap-2">
             <label className="whitespace-nowrap font-semibold">Sort:</label>
-            <Select onChange={handleChange} value={sidebarData.sort} id="sort">
+            <Select onChange={handleChange} value={sidebarData.order} id="order">
               <option value="desc">Latest</option>
               <option value="asc">Oldest</option>
             </Select>
@@ -125,8 +126,9 @@ export default function Search() {
               value={sidebarData.category}
               id="category"
             >
+              <option value="all">All</option>
               <option value="uncategorized">Uncategorized</option>
-              <option value="react">React</option>
+              <option value="reactjs">React</option>
               <option value="nextjs">NextJS</option>
               <option value="javascript">Javascript</option>
             </Select>

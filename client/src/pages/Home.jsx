@@ -42,7 +42,12 @@ export default function Home() {
                 <PostCard key={post._id} post={post} />
               ))}
             </div>
-            <Link to="/search" className="text-center text-teal-500 font-semibold text-lg hover:underline">View all posts</Link>
+            <Link
+              to="/search"
+              className="text-center text-teal-500 font-semibold text-lg hover:underline"
+            >
+              View all posts
+            </Link>
           </div>
         )}
       </div>
